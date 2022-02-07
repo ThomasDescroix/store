@@ -1,0 +1,20 @@
+<div *ngIf="product">
+    <h2>Edit product: {{ product.name }}</h2>
+    <form novalidate
+        [formGroup]="productForm"
+        (ngSubmit)="onSubmitProductForm()"
+    >   
+        <label>Name
+            <input formControlName="name" />
+        </label>
+        <label>Code
+            <input formControlName="code" />
+        </label>
+        <label>Description
+            <textarea formControlName="description"></textarea>
+        </label>
+
+        <input type="submit" value="Save" [disabled]="!(productForm.touched && productForm.status === 'VALID')"/>
+    </form>
+</div>
+

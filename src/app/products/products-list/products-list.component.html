@@ -1,0 +1,8 @@
+<h2>Products</h2>
+<ul *ngIf="products?.length">
+    <li *ngFor="let product of products"
+        (click)="onClickProduct(product)"
+    >
+        {{ product.name }} ({{ product.code }})
+    </li>
+</ul>

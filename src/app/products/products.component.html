@@ -1,0 +1,9 @@
+<sto-products-list
+    [products]="products"
+    (selectProductEvent)="changeSelectedProduct($event)"
+></sto-products-list>
+
+<sto-product-edit
+    [product]="selectedProduct"
+    (editProductEvent)="updateProduct($event)"
+></sto-product-edit>
