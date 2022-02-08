@@ -6,6 +6,8 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { ProductData } from './products/services/prodct.data';
 import { HttpClientInMemoryWebApiModule } from 'angular-in-memory-web-api';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { environment } from 'src/environments/environment';
 
 @NgModule({
   declarations: [
@@ -16,6 +18,11 @@ import { HttpClientInMemoryWebApiModule } from 'angular-in-memory-web-api';
     AppRoutingModule,
     HttpClientModule,
     HttpClientInMemoryWebApiModule.forRoot(ProductData),
+    environment.production 
+      ? []  
+      : StoreDevtoolsModule.instrument({
+        maxAge: 25
+      })
   ],
   providers: [],
   bootstrap: [AppComponent]
