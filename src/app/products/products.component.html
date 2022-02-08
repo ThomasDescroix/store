@@ -1,9 +1,9 @@
 <sto-products-list
-    [products]="products"
+    [products]="products$ | async"
     (selectProductEvent)="changeSelectedProduct($event)"
 ></sto-products-list>
 
 <sto-product-edit
-    [product]="selectedProduct"
+    [product]="selectedProduct$ | async"
     (editProductEvent)="updateProduct($event)"
 ></sto-product-edit>

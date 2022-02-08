@@ -9,6 +9,7 @@ import { HttpClientInMemoryWebApiModule } from 'angular-in-memory-web-api';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from 'src/environments/environment';
 import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
 
 @NgModule({
   declarations: [
@@ -19,12 +20,13 @@ import { StoreModule } from '@ngrx/store';
     AppRoutingModule,
     HttpClientModule,
     HttpClientInMemoryWebApiModule.forRoot(ProductData),
+    StoreModule.forRoot({}),
+    EffectsModule.forRoot([]),
     environment.production 
       ? []  
       : StoreDevtoolsModule.instrument({
         maxAge: 25
       }),
-    StoreModule.forRoot({})
   ],
   providers: [],
   bootstrap: [AppComponent]

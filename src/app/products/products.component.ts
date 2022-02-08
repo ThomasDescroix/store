@@ -1,46 +1,35 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Component, OnInit } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
 import { Product } from './models/Product';
-import { ProductService } from './services/product.service';
+import { loadProducts, setCurrentProduct, updateProduct } from './state/product.actions';
+import { selectCurrentProduct, selectError, selectProducts } from './state/product.selectors';
 
 @Component({
   selector: 'sto-products',
   templateUrl: './products.component.html'
 })
-export class ProductsComponent implements OnInit, OnDestroy {
-  errorMessage!: string;
-  products!: Product[];
-  selectedProduct!: Product;
-  sub!: Subscription;
+export class ProductsComponent implements OnInit {
+  selectedProduct$: Observable<Product>;
+  products$: Observable<Product[]>;
+  errorMessage$: Observable<string>;
 
-  constructor(private productService: ProductService) {}
+  constructor(private store: Store) {}
 
   ngOnInit(): void {
-    this.productService.getProducts().subscribe({
-      next: (products: Product[]) => this.products = products,
-      error: err => this.errorMessage = err
-    });
-
-    this.sub = this.productService.selectedProductChanges$.subscribe(
-      currentProduct => { 
-        if (currentProduct)
-          this.selectedProduct = currentProduct
-      }
-    );
-  }
-
-  ngOnDestroy(): void {
-    this.sub.unsubscribe();
+    this.products$ = this.store.select(selectProducts);
+    this.errorMessage$ = this.store.select(selectError);
+    this.selectedProduct$ = this.store.select(selectCurrentProduct); 
+    this.store.dispatch(loadProducts());   
   }
 
   changeSelectedProduct(product: Product) {
-    this.productService.changeSelectedProduct(product);
+    console.log(product);
+    if (product.id)
+      this.store.dispatch(setCurrentProduct({ currentProductId: product.id }));
   }
 
   updateProduct(product: Product) {
-    this.productService.updateProduct(product).subscribe({
-      next: p => this.productService.changeSelectedProduct(p),
-      error: err => this.errorMessage = err
-    });
+    this.store.dispatch(updateProduct({ product }));
   }
 }

@@ -1,27 +1,20 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Product } from '../models/Product';
-import { BehaviorSubject, catchError, map, Observable, of, tap, throwError } from 'rxjs';
+import { catchError, map, Observable, tap, throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProductService {
   private productsUrl = 'api/products';
-  private products!: Product[];
-
-  private selectedProductSource = new BehaviorSubject<Product | null>(null);
-  selectedProductChanges$ = this.selectedProductSource.asObservable();
 
   constructor(private httpClient: HttpClient) {}
   
   getProducts(): Observable<Product[]> {
-    if (this.products)
-      return of(this.products);
-
     return this.httpClient.get<Product[]>(this.productsUrl)
       .pipe(
-        tap(data => this.products = data),
+        tap(data => console.log(JSON.stringify(data))),
         catchError(this.handleError)
       );
   }
@@ -31,18 +24,9 @@ export class ProductService {
     const url = `${this.productsUrl}/${product.id}`;
     return this.httpClient.put<Product>(url, product, { headers })
       .pipe(
-        tap(() => {
-          const index = this.products.findIndex(item => item.id === product.id);
-          if (index > -1) 
-            this.products[index] = product;
-        }),
         map(() => product),
         catchError(this.handleError)
       );
-  }
-
-  changeSelectedProduct(selectedProduct: Product) {
-    this.selectedProductSource.next(selectedProduct);
   }
 
   private handleError(err: any) {
