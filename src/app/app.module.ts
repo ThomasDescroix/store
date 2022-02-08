@@ -8,6 +8,7 @@ import { ProductData } from './products/services/prodct.data';
 import { HttpClientInMemoryWebApiModule } from 'angular-in-memory-web-api';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from 'src/environments/environment';
+import { StoreModule } from '@ngrx/store';
 
 @NgModule({
   declarations: [
@@ -22,7 +23,8 @@ import { environment } from 'src/environments/environment';
       ? []  
       : StoreDevtoolsModule.instrument({
         maxAge: 25
-      })
+      }),
+    StoreModule.forRoot({})
   ],
   providers: [],
   bootstrap: [AppComponent]
